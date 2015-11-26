@@ -1,2 +1,0 @@
-# CMMInterpreter
-CMMInterpreter
