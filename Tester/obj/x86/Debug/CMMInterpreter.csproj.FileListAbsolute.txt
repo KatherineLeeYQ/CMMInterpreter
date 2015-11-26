@@ -40,3 +40,8 @@ C:\Users\Katherine\Desktop\解释器备份\解释器最新1124\Tester\obj\x86\De
 C:\Users\Katherine\Desktop\解释器备份\解释器最新1124\Tester\obj\x86\Debug\Tester.pdb
 F:\Source\课程相关\大三上\大三上作业有关\解释器最新1124\Tester\obj\x86\Debug\Tester.exe
 F:\Source\课程相关\大三上\大三上作业有关\解释器最新1124\Tester\obj\x86\Debug\Tester.pdb
+<<<<<<< HEAD
+=======
+C:\Users\Katherine\Desktop\CMMInpterpreter\Tester\obj\x86\Debug\Tester.exe
+C:\Users\Katherine\Desktop\CMMInpterpreter\Tester\obj\x86\Debug\Tester.pdb
+>>>>>>> 4349192b89c53a8a4319057a87e0a1bbdb925644
