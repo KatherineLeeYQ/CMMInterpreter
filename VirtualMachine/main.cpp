@@ -83,7 +83,7 @@ void ManipulateArg_Int(string arg)
 {
 	if (arg[0] != '@')//不为临时变量
 	{
-		//myFrame->movePtr(1);
+		myFrame->movePtr(1);
 		int pNum;
 		if (arg[0] == 'I')	//为变量
 		{
@@ -98,9 +98,18 @@ void ManipulateArg_Int(string arg)
 }
 bool IntCalculator(int oprNum, string arg1, string arg2)
 {
+	if(arg1[0] != '@' && arg2[0] == '@')
+	{
+		int tmp = myFrame->getInt(myFrame->esp);
+		stringstream ss;
+		ss << tmp; 
+		arg2 = ss.str();
+		moveMyPagePtr(-1);
+	}
+
 	ManipulateArg_Int(arg1);
-	myFrame->movePtr(1);
 	ManipulateArg_Int(arg2);
+
 	int op_a = myFrame->getInt(myFrame->esp);//第二个参数arg2
 	myFrame->movePtr(-1);
 	int op_b = myFrame->getInt(myFrame->esp);//第一个参数arg1
@@ -179,6 +188,13 @@ void ManipulateArg_Real(string arg)
 	//else //若为临时变量则不需处理
 }
 bool RealCalculator(int oprNum, string arg1, string arg2){
+	if(arg1[0] != '@' && arg2[0] == '@')
+	{
+		float tmp = myFrame->getReal(myFrame->esp);
+		arg2 = fcvt(tmp, 5, NULL, NULL);
+		moveMyPagePtr(-1);
+	}
+
 	ManipulateArg_Real(arg1);
 	ManipulateArg_Real(arg2);
 	float op_a = myFrame->getReal(myFrame->esp);
@@ -305,7 +321,7 @@ bool progRun(){
 				continue;
 			}
 			else if (instEsp->op == "PRM")
-			{
+			{				
 				void* locator = GetLocator(instEsp->arg2);
 				if (locator == NULL)
 				{
@@ -346,7 +362,10 @@ bool progRun(){
 
 				//有返回值，则写回返回值
 				if (instEsp->arg2 != "-")
+				{
 					memcpy(myFrame->esp, tmpEsp, 4);
+					moveMyPagePtr(1);
+				}
 
 				//获取父函数%ebp，切换回去
 				myFrame->ebp = (void*)myFrame->getInt(myFrame->ebp);
