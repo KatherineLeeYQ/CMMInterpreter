@@ -79,7 +79,7 @@ void* Frame::pat(int i,void * tmpebp){//相对定位值，ebp
 bool Frame::init(void* buffer,int c,int count){//esp，0，分配的内存大小(字节)
 	this->movePtr(count/4);
 	if(msgOfPage != 1)
-		memset((void*)(((int*)buffer)+1),c,count);//新分配count大小的区域，并清零
+		memset(buffer,c,count);//新分配count大小的区域，并清零
 	return 1;
 }
 int Frame::getMaxMem(){

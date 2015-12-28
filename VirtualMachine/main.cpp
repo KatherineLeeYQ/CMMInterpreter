@@ -271,7 +271,6 @@ void SetEspNum(string base, string off){
 	void* locator1 = GetLocator(base);
 	if (locator1 == NULL)//为数值
 	{
-		//myFrame->movePtr(1);
 		if (isRealNum(base))
 			myFrame->setReal((float)atof(base.c_str()));
 		else
@@ -308,20 +307,21 @@ bool progRun(){
 				int RetInstEspCount = instEspCount+1;	
 
 				//存储返回指令行
-				//if(!moveMyPagePtr(1))goto progEnd;
+				if(!moveMyPagePtr(1))goto progEnd;
 				myFrame->setInt(RetInstEspCount);		
 
 				//开始新帧, 存储函数调用前，父函数%ebp
 				if(!moveMyPagePtr(1))goto progEnd;
 				myFrame->setInt((int)myFrame->ebp);	
 				myFrame->ebp = myFrame->esp;
-				moveMyPagePtr(1);
+				//现在ebp == esp
 
 				instEspCount = atoi(instEsp->arg2.c_str()) - 1;//跳转到函数开始行，-1因为for循环还会将其++
 				continue;
 			}
 			else if (instEsp->op == "PRM")
 			{				
+				if(!moveMyPagePtr(1))goto progEnd;
 				void* locator = GetLocator(instEsp->arg2);
 				if (locator == NULL)
 				{
@@ -336,11 +336,10 @@ bool progRun(){
 					else
 						myFrame->setInt(myFrame->getInt(locator));
 				}
-				if(!moveMyPagePtr(1))goto progEnd;
 			}
 			else if(instEsp->op == "ALC"){
-				myFrame->init(myFrame->ebp, 0, atoi(instEsp->arg2.c_str())*4);//从(ebp + 1)开始，申请一块内存并将其清零
-				moveMyPagePtr(1);
+				void* base = (int*)myFrame->esp + 1;
+				myFrame->init(base, 0, atoi(instEsp->arg2.c_str())*4);//从esp开始，申请一块内存并将其清零
 				continue;
 			}
 			else if(instEsp->op == "RET"){
@@ -362,10 +361,7 @@ bool progRun(){
 
 				//有返回值，则写回返回值
 				if (instEsp->arg2 != "-")
-				{
 					memcpy(myFrame->esp, tmpEsp, 4);
-					moveMyPagePtr(1);
-				}
 
 				//获取父函数%ebp，切换回去
 				myFrame->ebp = (void*)myFrame->getInt(myFrame->ebp);
@@ -380,10 +376,12 @@ bool progRun(){
 				//若栈顶值为0，表示false，跳转
 				if (myFrame->getInt(myFrame->esp) == 0)
 					instEspCount = atoi(instEsp->arg2.c_str()) - 1;//-1是因为下次循环开始要++
+				moveMyPagePtr(-1);//关系运算后栈顶数值没用了
 				continue;
 			}
 			else if(instEsp->op == "ITR"){
 				//将栈顶元素由int转换为real
+				moveMyPagePtr(1);
 				SetEspNum(instEsp->arg1, "-");
 				int tmpInt = myFrame->getInt(myFrame->esp);
 				float tmpReal = (float)tmpInt;
@@ -442,13 +440,9 @@ bool progRun(){
 			}
 			else if (instEsp->op == "ARR")//ARR		1/Vb/-		Va/1		@..
 			{
+				moveMyPagePtr(1);
 				SetEspNum(instEsp->arg1, instEsp->arg2);
 				VCode* instEspPre = micodeInsts + instEspCount - 2;
-				if (instEspPre->op == "ARR")
-					moveMyPagePtr(-1);
-				VCode* instEspNext = micodeInsts + instEspCount;
-				if (instEspNext->op == "ARR")
-					moveMyPagePtr(1);
 			}
 			else if(instEsp->op == "ASN"){//ASN		Va			Vb/@1/1		-/1/Vc
 				//被赋值的变量
@@ -464,10 +458,14 @@ bool progRun(){
 				}
 
 				if (instEsp->arg2[0] != '@')
+				{
+					moveMyPagePtr(1);
 					SetEspNum(instEsp->arg2, "-");
+				}
 					
 				//进行赋值
 				memcpy(locator1,myFrame->esp,4);
+				moveMyPagePtr(-1);//赋值后栈顶数值没用了
 			}
 			else if(instEsp->op == "ADD"){//ADD		Va/@0/@R0/0		Vb/@1/@R1/1		@2/@R2
 				ForCalculate(instEsp, 1);
