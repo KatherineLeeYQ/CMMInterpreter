@@ -1,0 +1,11 @@
+F:\解释器备份\CMMInpterpreter\CMMInterpreter\bin\Debug\CMMInterpreter.exe
+F:\解释器备份\CMMInpterpreter\CMMInterpreter\bin\Debug\CMMInterpreter.pdb
+F:\解释器备份\CMMInpterpreter\CMMInterpreter\bin\Debug\FastColoredTextBox.dll
+F:\解释器备份\CMMInpterpreter\CMMInterpreter\bin\Debug\TabStrip.dll
+F:\解释器备份\CMMInpterpreter\CMMInterpreter\obj\x86\Debug\CMMInterpreter.csprojResolveAssemblyReference.cache
+F:\解释器备份\CMMInpterpreter\CMMInterpreter\obj\x86\Debug\CMMInterpreter.Welcome.resources
+F:\解释器备份\CMMInpterpreter\CMMInterpreter\obj\x86\Debug\CMMInterpreter.Main.resources
+F:\解释器备份\CMMInpterpreter\CMMInterpreter\obj\x86\Debug\CMMInterpreter.Properties.Resources.resources
+F:\解释器备份\CMMInpterpreter\CMMInterpreter\obj\x86\Debug\CMMInterpreter.csproj.GenerateResource.Cache
+F:\解释器备份\CMMInpterpreter\CMMInterpreter\obj\x86\Debug\CMMInterpreter.exe
+F:\解释器备份\CMMInpterpreter\CMMInterpreter\obj\x86\Debug\CMMInterpreter.pdb
